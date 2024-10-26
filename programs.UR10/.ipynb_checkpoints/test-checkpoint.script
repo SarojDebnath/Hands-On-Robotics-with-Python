@@ -1,0 +1,45 @@
+def test():
+  global _hidden_verificationVariable=0
+  step_count_3f4ad1fc_1e1a_45fa_8099_0eb12e573921 = 0.0
+  thread Step_Counter_Thread_6ce36aec_efaf_415f_b55c_6fbfe2f4f817():
+    while (True):
+      step_count_3f4ad1fc_1e1a_45fa_8099_0eb12e573921 = step_count_3f4ad1fc_1e1a_45fa_8099_0eb12e573921 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_6ce36aec_efaf_415f_b55c_6fbfe2f4f817()
+  modbus_add_signal("192.168.0.133", 255, 128, 2, "x0", False)
+  modbus_set_signal_update_frequency("x0", 10)
+  modbus_add_signal("192.168.0.133", 255, 129, 2, "zo", False)
+  modbus_set_signal_update_frequency("zo", 10)
+  modbus_add_signal("192.168.0.133", 255, 2, 1, "d1", False)
+  modbus_set_signal_update_frequency("d1", 10)
+  modbus_set_runstate_dependent_choice("d1",0)
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_safety_mode_transition_hardness(1)
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 2)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  set_target_payload(0.200000, [0.000000, 0.000000, 0.000000], [0.000105, 0.000105, 0.000105, 0.000000, 0.000000, 0.000000])
+  set_gravity([0.0, 0.0, 9.82])
+  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  global Waypoint_1_p=p[-.021161379423, -.556985370147, -.466861803684, -.001221359685, 3.116276528357, .038891915589]
+  global Waypoint_1_q=[-1.2977960115300107, -3.131039756917662, -1.9385257575705914, 0.3398857883367148, 1.6016624889174462, 0.2719495798509213]
+  global Waypoint_2_p=p[-.021161379436, -.556985370100, -.374219470358, -.001221359685, 3.116276528357, .038891915589]
+  global Waypoint_2_q=[-1.2977960114943397, -2.9739692201367407, -2.079669466443187, 0.32395896042948813, 1.6016624889180617, 0.2719495798866038]
+  $ 1 "Robot Program"
+  $ 2 "MoveJ"
+  $ 3 "Waypoint_1" "breakAfter"
+  movej(get_inverse_kin(Waypoint_1_p, qnear=Waypoint_1_q), a=1.3962634015954636, v=1.0471975511965976)
+  $ 4 "Waypoint_2" "breakAfter"
+  movej(get_inverse_kin(Waypoint_2_p, qnear=Waypoint_2_q), a=1.3962634015954636, v=1.0471975511965976)
+  write_output_integer_register(0, 2)
+end

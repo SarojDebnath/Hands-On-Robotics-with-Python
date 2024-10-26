@@ -1,0 +1,82 @@
+def track():
+  global _hidden_verificationVariable=0
+  set_target_payload(0.200000, [0.000000, 0.000000, 0.000000], [0.000105, 0.000105, 0.000105, 0.000000, 0.000000, 0.000000])
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  modbus_add_signal("192.168.0.133", 255, 128, 2, "x0", False)
+  modbus_set_signal_update_frequency("x0", 10)
+  modbus_add_signal("192.168.0.133", 255, 129, 2, "zo", False)
+  modbus_set_signal_update_frequency("zo", 10)
+  modbus_add_signal("192.168.0.133", 255, 2, 1, "d1", False)
+  modbus_set_signal_update_frequency("d1", 10)
+  modbus_set_runstate_dependent_choice("d1",0)
+  set_gravity([0.0, 0.0, 9.82])
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 2)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  set_safety_mode_transition_hardness(1)
+  step_count_d6b3f1c3_cf92_4d9d_8cd1_4dba9c6451be = 0.0
+  thread Step_Counter_Thread_f8672fa3_53ce_4d4e_b090_1e2ce271e203():
+    while (True):
+      step_count_d6b3f1c3_cf92_4d9d_8cd1_4dba9c6451be = step_count_d6b3f1c3_cf92_4d9d_8cd1_4dba9c6451be + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_f8672fa3_53ce_4d4e_b090_1e2ce271e203()
+  global Waypoint_1_p=p[-.164282717985, -.550452566477, .498390740233, .027768653312, -2.222066290726, 2.184605504370]
+  global Waypoint_1_q=[-1.546439268306525, -1.6225467345951259, -2.3241964827005943, 0.7882271234198219, 1.540847033333797, -0.030081944846433117]
+  $ 1 "BeforeStart"
+  $ 2 "MoveJ"
+  $ 3 "Waypoint_1" "breakAfter"
+  movej(get_inverse_kin(Waypoint_1_p, qnear=Waypoint_1_q), a=1.3962634015954636, v=1.0471975511965976)
+  $ 4 "x≔0.1"
+  global x=0.1
+  $ 5 "z≔0.1"
+  global z=0.1
+  $ 11 "Thread_1"
+  thread Thread_1():
+    while (True):
+      $ 12 "x≔(320-x0)/1000"
+      global x=(320-modbus_get_signal_status("x0"))/1000
+      $ 13 "z≔(240-zo)/1000"
+      global z=(240-modbus_get_signal_status("zo"))/1000
+    end
+  end
+  threadId_Thread_1 = run Thread_1()
+  while (True):
+    $ 6 "Robot Program"
+    $ 7 "If testswitch≟ True "
+    global thread_flag_7=0
+    thread Thread_if_7():
+      $ 8 "speedl([x,0,z,0,0,0],0.3,0.3)"
+      speedl([x,0,z,0,0,0],0.3,0.3)
+      thread_flag_7 = 1
+    end
+    if (get_standard_digital_out(0) ==   True  ):
+      global thread_handler_7=run Thread_if_7()
+      while (thread_flag_7 == 0):
+        if not(get_standard_digital_out(0) ==   True  ):
+          kill thread_handler_7
+          thread_flag_7 = 2
+        else:
+          sync()
+        end
+      end
+    else:
+      thread_flag_7 = 2
+    end
+    if (thread_flag_7 == 2):
+      $ 9 "Else" "noBreak"
+      $ 10 "stopl(20.0)"
+      stopl(20.0)
+    end
+  end
+end

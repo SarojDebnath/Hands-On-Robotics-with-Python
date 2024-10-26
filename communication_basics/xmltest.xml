@@ -1,0 +1,7 @@
+<note>
+  <to>John</to>
+  <to>Anna</to>
+  <from>Jane</from>
+  <heading>Reminder</heading>
+  <body>Don't forget our meeting tomorrow!</body>
+<hello>This is A Text</hello><num>seven</num></note>

@@ -1,0 +1,6 @@
+ Program
+   Robot Program
+     var_2≔MODBUS_1
+     Wait: 2.0
+     var_1≔MODBUS_2
+     Wait: 2.0

@@ -1,0 +1,43 @@
+def unnamed():
+  global _hidden_verificationVariable=0
+  step_count_96a14eef_5ebe_4606_b5f7_a8e4295064ca = 0.0
+  thread Step_Counter_Thread_84936e20_8d9b_4249_b62f_d85feb8aa652():
+    while (True):
+      step_count_96a14eef_5ebe_4606_b5f7_a8e4295064ca = step_count_96a14eef_5ebe_4606_b5f7_a8e4295064ca + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_84936e20_8d9b_4249_b62f_d85feb8aa652()
+  set_target_payload(0.200000, [0.000000, 0.000000, 0.000000], [0.000105, 0.000105, 0.000105, 0.000000, 0.000000, 0.000000])
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 2)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  set_safety_mode_transition_hardness(1)
+  set_gravity([0.0, 0.0, 9.82])
+  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  modbus_add_signal("192.168.0.133", 255, 128, 2, "MODBUS_1", False)
+  modbus_set_signal_update_frequency("MODBUS_1", 10)
+  modbus_add_signal("192.168.0.133", 255, 129, 3, "MODBUS_2", False)
+  modbus_set_signal_update_frequency("MODBUS_2", 10)
+  modbus_set_runstate_dependent_choice("MODBUS_2",0)
+  while (True):
+    $ 1 "Robot Program"
+    $ 2 "var_2≔MODBUS_1"
+    global var_2=modbus_get_signal_status("MODBUS_1")
+    $ 3 "Wait: 2.0"
+    sleep(2.0)
+    $ 4 "var_1≔MODBUS_2"
+    global var_1=modbus_get_signal_status("MODBUS_2")
+    $ 5 "Wait: 2.0"
+    sleep(2.0)
+  end
+end

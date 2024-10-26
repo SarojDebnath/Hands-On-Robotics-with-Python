@@ -1,0 +1,14 @@
+ Program
+   BeforeStart
+     MoveJ
+       Waypoint_1
+     x≔0.1
+     z≔0.1
+   Robot Program
+     If testswitch≟ True 
+       speedl([x,0,z,0,0,0],0.3,0.3)
+     Else
+       stopl(20.0)
+   Thread_1
+     x≔(320-x0)/1000
+     z≔(240-zo)/1000

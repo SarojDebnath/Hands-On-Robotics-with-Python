@@ -1,0 +1,26 @@
+# Replace 'path/to/packages' and 'path/to/scripts' with the actual paths
+PACKAGE_DIR="path/to/packages"
+SCRIPT_DIR="path/to/scripts"
+
+# Install packages
+for file in "$PACKAGE_DIR"/*.deb; do
+  sudo dpkg -i "$file"
+done
+
+# Create VNC folder
+sudo mkdir /root/.vnc
+
+# Generate VNC password
+sudo /usr/bin/x11vnc -storepasswd easybot /root/.vnc/passwd
+
+# Copy VNC script
+sudo cp "$SCRIPT_DIR/x11vnc" /etc/init.d/
+
+# Set script permissions
+sudo chmod +x /etc/init.d/x11vnc
+
+# Register service
+sudo update-rc.d x11vnc defaults
+
+# Start VNC service
+sudo /etc/init.d/x11vnc start
